@@ -261,6 +261,10 @@ socket.on("connect", function(status){
         }, function(err, docs){
             debugMode && console.log("docs:", docs);
 
+            if ( !docs.length ) return;
+
+            $(displayObjects).children().remove();
+
             docs.forEach(function(doc, index){
 
                 var img = new Image();
