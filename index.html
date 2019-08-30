@@ -38,7 +38,7 @@
 
 </head>
 
-<body style="background:none;">
+<body style="background:#000000;">
 
 <section class="mbr-section" id="gallery-section">
 
@@ -66,7 +66,7 @@
                 <li class="btn btn-primary get-next-btn pull-right">&#9658;</li>
             </div>
 
-            <div id="gallery-images-display" class="well"></div>
+            <div id="gallery-display" class="well"></div>
 
             <div style="margin:10px auto 10px auto;height:35px;max-width:350px;">
                 <li class="btn btn-primary btn-white-outline first-page-btn pull-left" style="margin-right:5px;">First</li>
@@ -157,15 +157,29 @@
 
 socket.on("connect", function(status){
 
+    const displayObjects = document.getElementById("gallery-display");
+
     socket.emit("mongo find", {
         selectors: {},
         collection: "gallery",
-        options: { skip:0, limit:20 }
-    }, function(err, data){
-        debugMode && console.log("data:", data);
+        options: { skip:0, limit:24 }
+    }, function(err, docs){
+        debugMode && console.log("docs:", docs);
+
+        docs.forEach(function(doc){
+
+            var img = new Image();
+            img.classList.add("thumbnail");
+            img.style.cssText = "display:inline-block;width:22.8rem;height:auto;";
+        //  var url = `https://i.imgur.com/${doc.preview}s.jpg`;
+            img.src = doc.link;
 
 
 
+
+            $(displayObjects).append(img);
+
+        });
 
     });
 
