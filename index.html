@@ -207,7 +207,7 @@ socket.on("connect", function(status){
     var Signal = signals.Signal;
 
     function count(){
-        return new Promise(function(resolve, reject){
+        new Promise(function(resolve, reject){
             socket.emit("mongo count", {
                 selectors: {},
                 collection: "gallery",
@@ -216,7 +216,9 @@ socket.on("connect", function(status){
                 resolve(num);
             });
         }).then(function(k){
-            return k;
+            max = k; debugMode && console.log("max:", max);
+        }).then(function(){
+            $(counter).find(".count").text(max);
         }).catch(function(err){
             console.error(err);
         });
@@ -411,9 +413,7 @@ socket.on("connect", function(status){
 
     //  Update count. (optional)
 
-        count().then(function(k){
-            max = k; debugMode && console.log("max:", max);
-        });
+        count();
 
     });
 
@@ -514,7 +514,7 @@ socket.on("connect", function(status){
 
     });
 
-    get_items();
+    count().then(get_items);
 
 });
 
