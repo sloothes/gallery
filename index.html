@@ -273,7 +273,7 @@ socket.on("connect", function(status){
                 img.style.cssText = "display:inline-block;width:22.8rem;height:auto;";
             //  img.src = doc.link;
                 $(img).on("load", function(){
-                    $(displayObjects).append(img);
+                    $(displayObjects).append(img); // testing!
                 }).attr({src:doc.link});
 
                 $(img).on("click", function(){
