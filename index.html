@@ -174,7 +174,7 @@ socket.on("connect", function(status){
             img.style.cssText = "display:inline-block;width:22.8rem;height:auto;";
             img.src = doc.link;
 
-            $(img).on("click"){
+            $(img).on("click", function(){
 
                 var pswp = $(".pswp").get(0);
                 var psui = PhotoSwipeUI_Default;
