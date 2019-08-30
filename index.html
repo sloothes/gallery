@@ -218,7 +218,7 @@ socket.on("connect", function(status){
         }).then(function(k){
             max = k; debugMode && console.log("max:", max);
         }).then(function(){
-            $(counter).find(".count").text(max);
+            $(catalogItemsPanel).find(".count").text(max);
         }).catch(function(err){
             console.error(err);
         });
