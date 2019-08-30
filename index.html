@@ -164,66 +164,6 @@
 </script>
 
 <script>
-/*
-socket.on("connect", function(status){
-
-    const displayObjects = document.getElementById("gallery-display");
-
-    socket.emit("mongo find", {
-        selectors: {},
-        collection: "gallery",
-        options: { skip:0, limit:24 }
-    }, function(err, docs){
-        debugMode && console.log("docs:", docs);
-
-        docs.forEach(function(doc, index){
-
-            var img = new Image();
-            img.classList.add("thumbnail");
-            img.title = doc.title; img.index = index;
-            img.style.cssText = "display:inline-block;width:22.8rem;height:auto;";
-            img.src = doc.link;
-
-            $(img).on("click", function(){
-
-                var pswp = $(".pswp").get(0);
-                var psui = PhotoSwipeUI_Default;
-
-                var items = []; // build items array.
-
-                docs.forEach(function(data, index){
-                    items.push({
-                        w:data.width,
-                        h:data.height,
-                        src:data.link,
-                    });
-                });
-
-                var options = {
-                    index: img.index, // start at selected index slide.
-                //  read for options: https://photoswipe.com/documentation/options.html
-                };
-
-                var gallery = new PhotoSwipe( pswp, psui, items, options );
-
-                gallery.init();
-
-            //  currentIndex = gallery.itemHolders[1].index;
-                debugMode && console.log({"gallery": gallery});
-
-            });
-
-            $(displayObjects).append(img);
-
-        });
-
-    });
-
-});
-*/
-</script>
-
-<script>
 
 socket.on("connect", function(status){
 
@@ -355,9 +295,10 @@ socket.on("connect", function(status){
                     debugMode && console.log({"gallery": gallery});
 
                 });
-            });
 
-            $(displayObjects).append(img);
+                $(displayObjects).append(img);
+
+            });
 
         });
 
@@ -421,6 +362,66 @@ socket.on("connect", function(status){
 
 });
 
+</script>
+
+<script>
+/*
+socket.on("connect", function(status){
+
+    const displayObjects = document.getElementById("gallery-display");
+
+    socket.emit("mongo find", {
+        selectors: {},
+        collection: "gallery",
+        options: { skip:0, limit:24 }
+    }, function(err, docs){
+        debugMode && console.log("docs:", docs);
+
+        docs.forEach(function(doc, index){
+
+            var img = new Image();
+            img.classList.add("thumbnail");
+            img.title = doc.title; img.index = index;
+            img.style.cssText = "display:inline-block;width:22.8rem;height:auto;";
+            img.src = doc.link;
+
+            $(img).on("click", function(){
+
+                var pswp = $(".pswp").get(0);
+                var psui = PhotoSwipeUI_Default;
+
+                var items = []; // build items array.
+
+                docs.forEach(function(data, index){
+                    items.push({
+                        w:data.width,
+                        h:data.height,
+                        src:data.link,
+                    });
+                });
+
+                var options = {
+                    index: img.index, // start at selected index slide.
+                //  read for options: https://photoswipe.com/documentation/options.html
+                };
+
+                var gallery = new PhotoSwipe( pswp, psui, items, options );
+
+                gallery.init();
+
+            //  currentIndex = gallery.itemHolders[1].index;
+                debugMode && console.log({"gallery": gallery});
+
+            });
+
+            $(displayObjects).append(img);
+
+        });
+
+    });
+
+});
+*/
 </script>
 
 </body>
