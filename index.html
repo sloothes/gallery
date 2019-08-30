@@ -127,6 +127,48 @@
 
 </section>
 
+<script>
+
+//  Socketcluster.
+
+    var socket = socketCluster.create({
+        hostname: "anywhere3d.com",
+        codecEngine: scCodecMinBin,
+    });
+
+    socket.on("connect", function(status){
+        debugMode && console.log({"status": status});
+    });
+
+    socket.on("error", function (err) {
+        console.error( err.stack );
+    });
+
+    socket.on("authStateChange", function( state ){
+        debugMode && console.log({"authStateChange": state});
+    });
+
+    socket.on("subscribe", function( name, object ){
+        debugMode && console.log(`subscribed successfully to "${name}" channel:`, object);
+    });
+
+</script>
+
+<script>
+
+socket.on("connect", function(status){
+
+    socket.emit("mongo find", {
+        selectors: {},
+        collection: "gallery",
+        opitons: { skip:0, limit:20 }
+    }, function(err, data){
+        debugMode && console.log("data:", data);
+
+
+
+
+    });
 
 
 
@@ -142,8 +184,9 @@
 
 
 
+});
 
-
+</script>
 
 </body>
 </html>
