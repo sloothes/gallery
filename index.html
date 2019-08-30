@@ -211,7 +211,7 @@ socket.on("connect", function(status){
             socket.emit("mongo count", {
                 selectors: {},
                 collection: "gallery",
-                options: { skip:skip }
+                options: { skip:0 }
             }, function(err, num){
                 resolve(num);
             });
