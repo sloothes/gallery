@@ -38,7 +38,7 @@
 
 </head>
 
-<body>
+<body style="background:none;">
 
 <section class="mbr-section" id="gallery-section">
 
@@ -160,7 +160,7 @@ socket.on("connect", function(status){
     socket.emit("mongo find", {
         selectors: {},
         collection: "gallery",
-        opitons: { skip:0, limit:20 }
+        options: { skip:0, limit:20 }
     }, function(err, data){
         debugMode && console.log("data:", data);
 
