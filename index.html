@@ -271,7 +271,10 @@ socket.on("connect", function(status){
                 img.classList.add("thumbnail");
                 img.title = doc.title; img.index = index;
                 img.style.cssText = "display:inline-block;width:22.8rem;height:auto;";
-                img.src = doc.link;
+            //  img.src = doc.link;
+                $(img).on("load", function(){
+                    $(displayObjects).append(img);
+                }).attr({src:doc.link});
 
                 $(img).on("click", function(){
 
@@ -302,7 +305,7 @@ socket.on("connect", function(status){
 
                 });
 
-                $(displayObjects).append(img);
+            //  $(displayObjects).append(img);
 
             });
 
