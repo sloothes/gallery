@@ -514,7 +514,10 @@ socket.on("connect", function(status){
 
     });
 
-    count().then(get_items);
+    count().then(function(){
+        init();
+        get_items();
+    });
 
 });
 
