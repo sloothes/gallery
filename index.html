@@ -181,11 +181,11 @@ socket.on("connect", function(status){
 
                 var items = []; // build items array.
 
-                docs.forEach(function(json, index){
+                docs.forEach(function(data, index){
                     items.push({
-                        w:doc.width,
-                        h:doc.height,
-                        src:doc.link,
+                        w:data.width,
+                        h:data.height,
+                        src:data.link,
                     });
                 });
 
