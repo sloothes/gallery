@@ -207,7 +207,7 @@ socket.on("connect", function(status){
     var Signal = signals.Signal;
 
     function count(){
-        new Promise(function(resolve, reject){
+        return new Promise(function(resolve, reject){
             socket.emit("mongo count", {
                 selectors: {},
                 collection: "gallery",
