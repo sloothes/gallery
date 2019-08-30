@@ -358,6 +358,170 @@ socket.on("connect", function(status){
 
     }
 
+//  Pager.
+
+    const pageSelector = "#material-pager .page-btn";
+    const firstPageBtn = $(pager).find(".first-page-btn").get(0);
+    const lastPageBtn  = $(pager).find(".last-page-btn").get(0);
+    const prevPageBtn  = $(pager).find(".get-prev-btn").get(0);
+    const nextPageBtn  = $(pager).find(".get-next-btn").get(0);
+    const prevGroupBtn = $(pager).find(".get-prev-group-btn").get(0);
+    const nextGroupBtn = $(pager).find(".get-next-group-btn").get(0);
+
+//  For performance we count items only when we ask last page 
+//  or we change droplist selectors. Not need to count on backward.
+
+//  Page button.
+
+    $(pageSelector).on("click", function(){
+
+        if ( max && this.skip < max ) {
+            skip = this.skip;
+            pagerClicked();
+        }
+
+    });
+
+//  First page.
+
+    $(firstPageBtn).on("click", function(){
+
+        skip = 0;
+        pagerClicked();
+
+    });
+
+//  Last page.
+
+    $(lastPageBtn).on("click", function(){
+
+        if ( max && max > 0 ) {
+
+            var lastpage = parseInt(max / limit);
+
+            if ( limit * lastpage < max ) {
+
+                skip = limit * lastpage;          //  limit * parseInt(max / limit);
+
+            } else {
+
+                skip = limit * ( lastpage - 1 );  //  limit * ( parseInt(max / limit) - 1 );
+
+            }
+
+        } else {
+
+            skip = 0;
+
+        }
+
+        pagerClicked();
+
+    //  Update count. (optional)
+
+        count().then(function(k){
+            max = k; debugMode && console.log("max:", max);
+        });
+
+    });
+
+//  Prev page.
+
+    $(prevPageBtn).on("click", function(){
+
+        if ( skip - limit < 0 ) {
+
+            skip = 0;
+
+        } else {
+
+            skip -= limit;
+        }
+
+        pagerClicked();
+
+    });
+
+//  Next page.
+
+    $(nextPageBtn).on("click", function(){
+
+        var lastpage = parseInt(max / limit);
+
+        if ( skip + limit < max )
+
+            skip += limit;
+
+        else if ( skip + limit > max )
+            
+            skip = limit * lastpage;
+
+    //  else if ( skip + limit == max ) skip;
+
+        pagerClicked();
+
+    });
+
+//  Prev group.
+
+    $(prevGroupBtn).on("click", function(){
+
+        var offset = pageslength * limit;
+
+        if ( skip - offset < 0 ) {
+
+            skip = 0;
+
+        } else {
+
+            skip -= offset;
+        }
+
+        pagerClicked();
+
+    });
+
+//  Next group.
+
+    $(nextGroupBtn).on("click", function(){
+
+        var offset = pageslength * limit;
+
+        if ( max > 0 ) {
+
+            var lastpage = parseInt(max / limit);
+
+            if ( skip + offset < max ) {
+
+                skip += offset;
+
+            } else if ( skip + offset > max ) {
+
+                if ( limit * lastpage < max ) {
+
+                    skip = limit * lastpage;
+
+                } else {
+
+                    skip = limit * ( lastpage - 1 );
+                }
+
+            } else if ( skip + offset == max ) {
+
+                skip = limit * ( lastpage - 1 );
+
+            }
+
+        } else {
+
+            skip = 0;
+
+        }
+
+        pagerClicked();
+
+    });
+
     get_items();
 
 });
