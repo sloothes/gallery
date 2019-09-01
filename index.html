@@ -263,50 +263,115 @@ socket.on("connect", function(status){
 
             if ( !docs.length ) return;
 
-            $(displayObjects).children().remove();
+            caches.open("gallery").then(function(cache){
 
-            docs.forEach(function(doc, index){
+                $(displayObjects).children().remove();
 
-                var img = new Image();
-                img.classList.add("thumbnail");
-                img.title = doc.title; img.index = index;
-                img.style.cssText = "display:inline-block;width:22.8rem;height:auto;";
-            //  img.src = doc.link;
-                $(img).on("load", function(){
-                    $(displayObjects).append(img); // testing!
-                }).attr({src:doc.link});
+                docs.forEach(function(doc, index){
 
-                $(img).on("click", function(){
-
-                    var pswp = $(".pswp").get(0);
-                    var psui = PhotoSwipeUI_Default;
-
-                    var items = []; // build items array.
-
-                    docs.forEach(function(data, index){
-                        items.push({
-                            w:data.width,
-                            h:data.height,
-                            src:data.link,
-                        });
+                    var img = new Image();
+                    img.index = index;
+                    img.classList.add("thumbnail");
+                    img.title = doc.title || doc.name; 
+                    img.style.cssText = "display:inline-block;width:22.8rem;height:auto;";
+                //  img.src = doc.link;
+                    $(img).on("load", function(){
+                    //  $(displayObjects).append(img); // debugging!
+                        if ( img.src.startsWith("blob:") ) {
+                            URL.revokeObjectURL(img.src);
+                        }
                     });
 
-                    var options = {
-                        index: img.index, // start at selected index slide.
-                    //  read for options: https://photoswipe.com/documentation/options.html
-                    };
+                    $(displayObjects).append(img); // important!
 
-                    var gallery = new PhotoSwipe( pswp, psui, items, options );
+                    cache.match(src).then(function(response){
+                        if (response) return response.blob();
+                        else return cache.add(src).then(function(){
+                            return cache.match(src).then(function(response){
+                                return response.blob();
+                            });
+                        });
 
-                    gallery.init();
+                    }).then(function(blob){
 
-                //  currentIndex = gallery.itemHolders[1].index;
-                    debugMode && console.log({"gallery": gallery});
+                        if (blob) img.src = URL.createObjectURL(blob);
+                        else img.src = src; // `https://i.imgur.com/${doc.id}.jpg`;
+
+                        $(img).on("click", function(){
+
+                            var pswp = $(".pswp").get(0);
+                            var psui = PhotoSwipeUI_Default;
+
+                            var options = { index: img.index }; // start at selected index slide.
+                        //  read more about options: https://photoswipe.com/documentation/options.html
+
+                        //  Collect items.
+
+                            var promises = []; // build items array.
+
+                            docs.forEach(function(data, index){
+
+                                var url = data.link || data.url;
+
+                                promises.push(
+                                    (function(){
+                                        return cache.match(url).then(function(response){
+                                            if (response) return response.blob();
+                                            else return cache.add(url).then(function(){
+                                                return cache.match(url).then(function(response){
+                                                    return response.blob();
+                                                });
+                                            });
+
+                                        }).then(function(blob){
+                                        //  debugMode && console.log(blob);
+
+                                            var options = {};
+                                            options.w = data.width;
+                                            options.h = data.height;
+                                            if (blob) options.src = URL.createObjectURL(blob);
+                                            else options.src = url;
+                                            return options;
+
+                                        }).catch(function(err){
+                                            console.error(err);
+                                        });
+                                    })() // do not use ";"
+                                ); // end of push.
+
+                            }); // end of forEach.
+
+                        //  debugMode && console.log(promises);
+
+                            Promise.all(promises).then(function(items){
+
+                                var gallery = new PhotoSwipe( pswp, psui, items, options );
+
+                                gallery.listen("close", function() { 
+                                    gallery.items.forEach(function(item, index){
+                                    //  debugMode && console.log( item );
+                                        if ( item.src.startsWith("blob:") ) {
+                                            URL.revokeObjectURL(item.src);
+                                            debugMode && console.log( "revoked:", item.src );
+                                        }
+                                    });
+                                });
+
+                                gallery.init(); // important!
+
+                            //  currentIndex = gallery.itemHolders[1].index;
+                                debugMode && console.log({"gallery": gallery});
+
+                            });
+
+                        });
+
+                    });
 
                 });
 
-            //  $(displayObjects).append(img);
-
+            }).catch(function(err){
+                console.error(err);
             });
 
         });
