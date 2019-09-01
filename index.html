@@ -269,6 +269,8 @@ socket.on("connect", function(status){
 
                 docs.forEach(function(doc, index){
 
+                    var src = doc.link || doc.url; // important!
+
                     var img = new Image();
                     img.index = index;
                     img.classList.add("thumbnail");
