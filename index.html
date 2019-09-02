@@ -273,7 +273,7 @@ socket.on("connect", function(status){
 
                     var img = new Image();
                     img.index = index;
-                    img.classList.add("thumbnail fade");
+                    img.classList.add("thumbnail", "fade");
                     img.title = doc.title || doc.name; 
                     img.style.cssText = "width:22.8rem;height:auto;";
                 //  img.src = doc.link;
