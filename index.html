@@ -278,7 +278,7 @@ socket.on("connect", function(status){
                     img.style.cssText = "display:none;width:22.8rem;height:auto;";
                 //  img.src = doc.link;
                     $(img).on("load", function(){
-                        $(img).fadeOut();
+                        $(img).fadeIn();
                     //  img.style.display = "inline-block"; // important!
                     //  $(displayObjects).append(img); // debugging!
                         if ( img.src.startsWith("blob:") ) {
